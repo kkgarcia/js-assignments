@@ -22,8 +22,7 @@
  *   '',  'bb'  => 'bb'
  */
 function concatenateStrings(value1, value2) {
-    const concatenatedString = value1.concat(value2)
-    return concatenatedString
+    return value1.concat(value2)
 }
 
 
@@ -39,8 +38,7 @@ function concatenateStrings(value1, value2) {
  *   ''      => 0
  */
 function getStringLength(value) {
-    const length = value.length
-    return length
+    return value.length
 }
 
 /**
@@ -57,8 +55,7 @@ function getStringLength(value) {
  *   'Chuck','Norris'  => 'Hello, Chuck Norris!'
  */
 function getStringFromTemplate(firstName, lastName) {
-    const template = `Hello, ${firstName} ${lastName}!`
-    return template
+    return `Hello, ${firstName} ${lastName}!`
 }
 
 /**
@@ -72,8 +69,7 @@ function getStringFromTemplate(firstName, lastName) {
  *   'Hello, Chuck Norris!' => 'Chuck Norris'
  */
 function extractNameFromTemplate(value) {
-    const extracted = value.substring(7, value.length - 1)
-    return extracted
+    return value.substring(7, value.length - 1)
 }
 
 
@@ -88,8 +84,7 @@ function extractNameFromTemplate(value) {
  *   'cat'       => 'c'
  */
 function getFirstChar(value) {
-    const firstChar = value.charAt(0)
-    return firstChar
+    return value.charAt(0)
 }
 
 /**
@@ -104,8 +99,7 @@ function getFirstChar(value) {
  *   '\tHello, World! ' => 'Hello, World!'
  */
 function removeLeadingAndTrailingWhitespaces(value) {
-    const trimmed = value.trim()
-    return trimmed
+    return value.trim()
 }
 
 /**
@@ -120,11 +114,7 @@ function removeLeadingAndTrailingWhitespaces(value) {
  *   'cat', 3 => 'catcatcat'
  */
 function repeatString(value, count) {
-    let result = ''
-    for (let i = 0; i < count; i++) {
-        result += value
-    }
-    return result
+    return value.repeat(count)
 }
 
 /**
@@ -140,10 +130,7 @@ function repeatString(value, count) {
  *   'ABABAB','BA' => 'ABAB'
  */
 function removeFirstOccurrences(str, value) {
-    const startIndex = str.indexOf(value)
-    const endIndex = startIndex + value.length
-    const newStr = str.slice(0, startIndex).trim() + str.substring(endIndex)
-    return newStr
+    return str.replace(value, '')
 }
 
 /**
@@ -158,10 +145,7 @@ function removeFirstOccurrences(str, value) {
  *   '<a>' => 'a'
  */
 function unbracketTag(str) {
-    const startIndex = 1
-    const endIndex = str.length - 1
-    const newStr = str.slice(startIndex, endIndex)
-    return newStr
+    return str.slice(1, -1)
 }
 
 
@@ -176,8 +160,7 @@ function unbracketTag(str) {
  *  'abcdefghijklmnopqrstuvwxyz' => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
  */
 function convertToUpperCase(str) {
-    const upperCase = str.toUpperCase()
-    return upperCase
+    return str.toUpperCase()
 }
 
 /**
@@ -191,8 +174,7 @@ function convertToUpperCase(str) {
  *   'info@gmail.com' => ['info@gmail.com']
  */
 function extractEmails(str) {
-    const emailList = str.split(';')
-    return emailList
+    return str.split(';')
 }
 
 /**
@@ -219,49 +201,10 @@ function extractEmails(str) {
  *
  */
 function getRectangleString(width, height) {
-    const symbols = ['┌', '┐', '└', '┘', '─', '│']
-
-    let res = ''
-
-    for (let i = 0; i < height; i++) {
-
-        for (let j = 0; j < width; j++) {
-            if (i === 0 && j === 0) {
-                res += symbols[0]
-                continue
-            }
-
-            if (i === 0 && j === width - 1) {
-                res += symbols[1]
-                continue
-            }
-
-            if (i === height - 1 && j === width - 1) {
-                res += symbols[3]
-                continue
-            }
-
-            if (i === height - 1 && j === 0) {
-                res += symbols[2]
-                continue
-            }
-            
-            if ((i > 0 && i < height) && (j === 0 || j === width - 1)) {
-                res += symbols[5]
-                continue
-            }
-            
-
-            if (i === 0 || i === height - 1) {
-                res += symbols[4]
-                continue
-            }
-
-            res += ' '
-        }
-        res += '\n'
-    }
-    return res
+    const top = `┌${'─'.repeat(width - 2 > 0 ? width - 2 : 0)}┐\n`
+    const body = height > 2 ? `│${' '.repeat(width - 2)}│\n` : ''
+    const bottom = `└${'─'.repeat(width - 2 > 0 ? width - 2 : 0)}┘\n`
+    return top + `${!!body ? body.repeat(height - 2) : ''}` + bottom
 }
 
 
@@ -281,35 +224,12 @@ function getRectangleString(width, height) {
  *
  */
 function encodeToRot13(str) {
-  if (!str) return str
-  const alphabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
-  const dict = {}
-  
-  // filling dict by letter coresponding to its cypher letter
-  for (let i = 0; i < alphabet.length; i++) {
-    const cypherIndex = i + 13
-    const position = cypherIndex > 25 ? cypherIndex - 26 : cypherIndex
-    dict[alphabet[i]] = alphabet[position]
-  }
-  
-  const messageList = str.split(' ')
-  const result = []  
-  
-  //mapping each letter to its cypher
-  for (let i = 0; i < messageList.length; i++) {
-    const word = messageList[i]
-    const cypher = word.split('').map(letter => {
-      if (!alphabet.includes(letter.toLowerCase())) return letter
-        
-      if (letter === letter.toUpperCase()) {
-        return dict[letter.toLowerCase()].toUpperCase()
-      }
-      return dict[letter]
+    const newStr = str.replace(/[a-z]/gi, letter => {
+        const charCode = letter.charCodeAt(0)
+        const cypher = charCode + (letter.toLowerCase() <= 'm' ? 13 : -13)
+        return String.fromCharCode(cypher)
     })
-    result.push(cypher.join(''))
-  }
-  
-  return result.join(' ')
+    return newStr
 }
 
 /**
@@ -326,8 +246,7 @@ function encodeToRot13(str) {
  *   isString(new String('test')) => true
  */
 function isString(value) {
-    const isString = typeof value === 'string' || value instanceof String
-    return isString
+    return typeof value === 'string' || value instanceof String
 }
 
 
@@ -361,8 +280,7 @@ function getCardId(value) {
                    'A♥','2♥','3♥','4♥','5♥','6♥','7♥','8♥','9♥','10♥','J♥','Q♥','K♥',
                    'A♠','2♠','3♠','4♠','5♠','6♠','7♠','8♠','9♠','10♠','J♠','Q♠','K♠']
 
-    const cardId = cards.indexOf(value)
-    return cardId
+    return cards.indexOf(value)
 }
 
 
