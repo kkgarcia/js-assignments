@@ -52,10 +52,10 @@ function getCicleCircumference(radius) {
  *  -3, 3  => 0
  */
 function getAverage(value1, value2) {
-  if (value1 + value2 === 0) return 0;
   if (value1 + value2 > Number.MAX_VALUE) {
     return (BigInt(value1) + BigInt(value2)) / 2n;
   }
+
   return (value1 + value2) / 2;
 }
 
@@ -91,8 +91,7 @@ function getDistanceBetweenPoints(x1, y1, x2, y2) {
  *   5*x = 0         => 0
  */
 function getLinearEquationRoot(a, b) {
-  if (b === 0 || !b) return 0;
-  return (-1 * b) / a;
+  return -b / a;
 }
 
 /**
@@ -117,6 +116,7 @@ function getAngleBetweenVectors(x1, x2, y1, y2) {
   const magnitudeX = Math.sqrt(Math.pow(x1, 2) + Math.pow(x2, 2));
   const magnitudeY = Math.sqrt(Math.pow(y1, 2) + Math.pow(y2, 2));
   const cos = product / (magnitudeX * magnitudeY);
+
   return Math.acos(cos);
 }
 
@@ -210,6 +210,7 @@ function isPrime(n) {
   for (let i = 2; i < n; i++) {
     if (n % i === 0) return false;
   }
+
   return true;
 }
 
