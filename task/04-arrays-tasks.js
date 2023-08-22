@@ -208,9 +208,7 @@ function getTail(arr, n) {
  *    +'30,31,32,33,34'
  */
 function toCsvText(arr) {
-   if (!arr.length) return ''
-
-   return arr.reduce((acc, curr, index) => acc += curr.join(',') + (index === arr.length - 1 ? '' : '\n'), '')
+   return arr.map(elem => elem.join(',')).join('\n')
 }
 
 /**
@@ -265,17 +263,7 @@ function getMovingSum(arr) {
  * [ "a" ] => []
  */
 function getSecondItems(arr) {
-   if (arr.length < 2) return []
-
-   const newArr = []
-   let index = 1
-
-   for (let i = 0; i < Math.floor(arr.length / 2); i++) {
-      newArr.push(arr[index])
-      index += 2
-   }
-
-   return newArr
+   return arr.filter((item, index) => index % 2 !== 0)
 }
 
 
@@ -312,12 +300,9 @@ function propagateItemsByPositionIndex(arr) {
  *   [ 10, 10, 10, 10 ] => [ 10, 10, 10 ]
  */
 function get3TopItems(arr) {
-   // reversed array because test didn't accept original, technically all values are the same
-   if (arr.length <= 3) return arr.reverse()
-
-   arr.sort((a, b) => a - b)
+   arr.sort((a, b) => b - a)
    
-   return [arr[arr.length - 1], arr[arr.length - 2], arr[arr.length - 3]]
+   return arr.length <= 3 ? arr : arr.slice(0, 3)
 }
  
  
@@ -335,12 +320,8 @@ function get3TopItems(arr) {
  *   [ 1, '2' ] => 1
  */
 function getPositivesCount(arr) {
-
    return arr.reduce((acc, curr) => {
-      if (typeof curr === 'number' && curr > 0) {
-
-         return acc + 1
-      }
+      if (typeof curr === 'number' && curr > 0) return acc + 1
 
       return acc
    }, 0)
@@ -529,15 +510,7 @@ function getIdentityMatrix(n) {
  *     3, 3   => [ 3 ]
  */
 function getIntervalArray(start, end) {
-   let initionValue = start
-   const arr = []
-
-   while (initionValue <= end) {
-      arr.push(initionValue)
-      initionValue++
-   }
-
-   return arr
+   return Array.from({ length: end - start + 1 }, (_, i) => start + i)
 }
 
 /**
@@ -586,7 +559,6 @@ function distinct(arr) {
  *   }
  */
 function group(array, keySelector, valueSelector) {
-
    return array.reduce((map, curr) => {
       if (!map.has(keySelector(curr))) map.set(keySelector(curr), [])
 
