@@ -99,8 +99,8 @@ function timeSpanToString(startDate, endDate) {
  *    Date.UTC(2016,3,5,18, 0) => Math.PI
  *    Date.UTC(2016,3,5,21, 0) => Math.PI/2
  */
-function angleBetweenClockHands(UTC_Date) {
-   const date = new Date(UTC_Date)
+function angleBetweenClockHands(utcDate) {
+   const date = new Date(utcDate)
    const hour = date.getUTCHours() % 12
    const minutes = date.getMinutes()
 
