@@ -30,13 +30,19 @@
  *
  */
 function getFizzBuzz(num) {
-    if (num % 3 === 0 && num % 5 === 0) {
+    if (num % 15 === 0) {
         return 'FizzBuzz'
-    } else if (num % 3 === 0) {
+    }
+    
+    if (num % 3 === 0) {
         return 'Fizz'
-    } else if (num % 5 === 0) {
+    }
+    
+    if (num % 5 === 0) {
         return 'Buzz'
-    } else return num
+    }
+    
+    return num
 }
 
 
@@ -52,13 +58,9 @@ function getFizzBuzz(num) {
  *   10 => 3628800
  */
 function getFactorial(n) {
-    let fact = 1
+    if (n === 1) return n
 
-    for (let i = 1; i <= n; i++) {
-        fact *= i
-    }
-
-    return fact
+    return getFactorial(n - 1) * n
 }
 
 
@@ -233,11 +235,17 @@ function getIntervalString(a, b, isStartIncluded, isEndIncluded) {
 
     if (isStartIncluded && isEndIncluded) {
         return `[${start}, ${end}]`
-    } else if (isStartIncluded) {
+    }
+    
+    if (isStartIncluded) {
         return `[${start}, ${end})`
-    } else if (isEndIncluded) {
+    }
+    
+    if (isEndIncluded) {
         return `(${start}, ${end}]`
-    } else return `(${start}, ${end})`
+    }
+    
+    return `(${start}, ${end})`
 }
 
 
