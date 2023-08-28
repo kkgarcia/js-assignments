@@ -33,7 +33,14 @@
  *
  */
 function* get99BottlesOfBeer() {
-    throw new Error('Not implemented');
+    
+    for (let i = 99; i > 0; i--) {
+        yield `${i} bottle${i > 1 ? 's' : ''} of beer on the wall, ${i} bottle${i > 1 ? 's' : ''} of beer.`
+        yield `Take one down and pass it around, ${i - 1 > 0 ? i - 1 : 'no more'} bottle${i - 1 !== 1 ? 's' : ''} of beer on the wall.`
+    }
+
+    yield 'No more bottles of beer on the wall, no more bottles of beer.'
+    yield 'Go to the store and buy some more, 99 bottles of beer on the wall.'
 }
 
 
@@ -47,7 +54,15 @@ function* get99BottlesOfBeer() {
  *
  */
 function* getFibonacciSequence() {
-    throw new Error('Not implemented');
+    let current = 0
+    let next = 1
+    
+    while (true) {
+        yield current
+        const temp = next
+        next = next + current
+        current = temp
+    }
 }
 
 
@@ -82,7 +97,20 @@ function* getFibonacciSequence() {
  *
  */
 function* depthTraversalTree(root) {
-    throw new Error('Not implemented');
+    const stack = []
+    stack.push(root)
+
+    while (stack.length) {
+        const node = stack.pop()
+
+        yield node
+
+        if (node.children) {
+            for (let i = node.children.length - 1; i >= 0; i--) {
+                stack.push(node.children[i])
+            }
+        }
+    }
 }
 
 
@@ -108,7 +136,22 @@ function* depthTraversalTree(root) {
  *
  */
 function* breadthTraversalTree(root) {
-    throw new Error('Not implemented');
+    const stack = []
+    stack.push(root)
+    let index = 0
+
+    while (index < stack.length) {
+        const node = stack[index]
+        index++
+
+        yield node
+
+        if (node.children) {
+            for (let i = 0; i < node.children.length; i++) {
+                stack.push(node.children[i])
+            }
+        }
+    }
 }
 
 
@@ -126,7 +169,30 @@ function* breadthTraversalTree(root) {
  *   [ 1, 3, 5, ... ], [ -1 ] => [ -1, 1, 3, 5, ...]
  */
 function* mergeSortedSequences(source1, source2) {
-    throw new Error('Not implemented');
+    const generator1 = source1()
+    const generator2 = source2()
+
+    let num1 = generator1.next()
+    let num2 = generator2.next()
+
+    while (!num1.done || !num2.done) {
+
+        if (num1.done || num2.done) {
+            yield !num1.done ? num1.value : num2.value
+            num1 = generator1.next()
+            num2 = generator2.next()
+        }
+
+        if (num1.value < num2.value && !num1.done && !num2.done) {
+            yield num1.value
+            num1 = generator1.next()
+        }
+
+        if (num1.value > num2.value && !num1.done && !num2.done) {
+            yield num2.value
+            num2 = generator2.next()
+        }
+    }
 }
 
 
