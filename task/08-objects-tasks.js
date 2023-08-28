@@ -23,7 +23,12 @@
  *    console.log(r.getArea());   // => 200
  */
 function Rectangle(width, height) {
-    throw new Error('Not implemented');
+    this.width = width
+    this.height = height
+}
+
+Rectangle.prototype.getArea = function() {
+    return this.width * this.height
 }
 
 
@@ -38,7 +43,7 @@ function Rectangle(width, height) {
  *    { width: 10, height : 20 } => '{"height":10,"width":20}'
  */
 function getJSON(obj) {
-    throw new Error('Not implemented');
+    return JSON.stringify(obj)
 }
 
 
@@ -54,7 +59,7 @@ function getJSON(obj) {
  *
  */
 function fromJSON(proto, json) {
-    throw new Error('Not implemented');
+    return Object.assign(Object.create(proto), JSON.parse(json))
 }
 
 
@@ -106,34 +111,162 @@ function fromJSON(proto, json) {
  *  For more examples see unit tests.
  */
 
+// Prototype for BaseElementSelectorFactory() instance
+const baseSelectorPrototype = {
+    element: function (value) {
+        if (
+            this.mountedSelectors.includes('id') ||
+            this.mountedSelectors.includes('class') ||
+            this.mountedSelectors.includes('attribute') ||
+            this.mountedSelectors.includes('pseudo-class') ||
+            this.mountedSelectors.includes('pseudo-element')
+        ) {
+            throw new Error(
+                'Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element'
+            )
+        }
+
+        if (this.mountedSelectors.includes('element')) {
+            throw new Error(
+                'Element, id and pseudo-element should not occur more then one time inside the selector'
+            )
+        }
+
+        this.mountedSelectors.push('element')
+        this.selector += value
+
+        return this
+    },
+
+    id: function (value) {
+        if (
+            this.mountedSelectors.includes('class') ||
+            this.mountedSelectors.includes('attribute') ||
+            this.mountedSelectors.includes('pseudo-class') ||
+            this.mountedSelectors.includes('pseudo-element')
+        ) {
+            throw new Error(
+                'Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element'
+            )
+        }
+
+        if (this.mountedSelectors.includes('id')) {
+            throw new Error(
+                'Element, id and pseudo-element should not occur more then one time inside the selector'
+            )
+        }
+
+        this.mountedSelectors.push('id')
+        this.selector += '#' + value
+
+        return this
+    },
+
+    class: function (value) {
+        if (
+            this.mountedSelectors.includes('attribute') ||
+            this.mountedSelectors.includes('pseudo-class') ||
+            this.mountedSelectors.includes('pseudo-element')
+        ) {
+            throw new Error(
+                'Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element'
+            )
+        }
+
+        this.mountedSelectors.push('class')
+        this.selector += '.' + value
+
+        return this
+    },
+
+    attr: function (value) {
+        if (
+            this.mountedSelectors.includes('pseudo-class') ||
+            this.mountedSelectors.includes('pseudo-element')
+        ) {
+            throw new Error(
+                'Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element'
+            )
+        }
+
+        this.mountedSelectors.push('attribute')
+        this.selector += `[${value}]`
+
+        return this
+    },
+
+    pseudoClass: function (value) {
+        if (this.mountedSelectors.includes('pseudo-element')) {
+            throw new Error(
+                'Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element'
+            )
+        }
+
+        this.mountedSelectors.push('pseudo-class')
+        this.selector += ':' + value
+
+        return this
+    },
+
+    pseudoElement: function (value) {
+        if (this.mountedSelectors.includes('pseudo-element')) {
+            throw new Error(
+                'Element, id and pseudo-element should not occur more then one time inside the selector'
+            )
+        }
+
+        this.mountedSelectors.push('pseudo-element')
+        this.selector += '::' + value
+
+        return this
+    },
+    
+    stringify: function () {
+        return this.selector
+    }
+}
+
+// Factory function for creating base object
+function BaseElementSelectorFactory() {
+    const mountedSelectors = []
+    const selector = ''
+
+    return Object.assign(Object.create(baseSelectorPrototype), {
+        selector,
+        mountedSelectors
+    })
+}
+
 const cssSelectorBuilder = {
 
     element: function(value) {
-        throw new Error('Not implemented');
+        return BaseElementSelectorFactory().element(value)
     },
 
     id: function(value) {
-        throw new Error('Not implemented');
+        return BaseElementSelectorFactory().id(value)
     },
 
     class: function(value) {
-        throw new Error('Not implemented');
+        return BaseElementSelectorFactory().class(value)
     },
 
     attr: function(value) {
-        throw new Error('Not implemented');
+        return BaseElementSelectorFactory().attr(value)
     },
 
     pseudoClass: function(value) {
-        throw new Error('Not implemented');
+        return BaseElementSelectorFactory().pseudoClass(value)
     },
 
     pseudoElement: function(value) {
-        throw new Error('Not implemented');
+        return BaseElementSelectorFactory().pseudoElement(value)
     },
 
     combine: function(selector1, combinator, selector2) {
-        throw new Error('Not implemented');
+        selector1.selector = selector1.selector + ` ${combinator} ` + selector2.selector
+
+        return selector1
     },
 };
 
